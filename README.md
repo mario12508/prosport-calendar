@@ -1,5 +1,5 @@
-# Django example
-## Пример
+# Prosport calendar
+## Интерактивная платформа для отображения календаря спортивных мероприятий, с возможностью фильтрации событий по ключевым параметрам
 ### Инструкция по запуску проекта
 Все команды вводятся в терминале</br>
 ***Необходимо иметь установленные pip и python для терминала***
@@ -7,13 +7,13 @@
 #### Клонируем проект
 
 ```commandline
-git clone https://github.com/124476/DjangoExmple
+https://github.com/hackathonsrus/pp_20299_pfo_ta_litseisti_kfu_102
 ```
 
 #### Переходим в папку djexmple
 
 ```commandline
-cd djexmple
+cd prosport_calendar
 ```
 
 #### Создаём и активируем виртуальное окружение
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 #### Переходим в папку с manage.py
 
 ```commandline
-cd djexample
+cd prosport_calendar
 ```
 
 #### Настраиваем миграции

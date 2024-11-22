@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
     "homepage.apps.HomepageConfig",
+    "meropriations.apps.MeropriationsConfig",
     "active_link",
 ]
 
@@ -41,7 +42,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "djexmple.urls"
+ROOT_URLCONF = "prosport_calendar.urls"
 
 TEMPLATES = [
     {
@@ -59,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "djexmple.wsgi.application"
+WSGI_APPLICATION = "prosport_calendar.wsgi.application"
 
 
 DATABASES = {
