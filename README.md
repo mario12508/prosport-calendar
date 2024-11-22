@@ -85,3 +85,6 @@ C:\path\to\python3.8\python.exe -m venv venv
 ```commandline
 python3.8 -m venv venv
 ```
+
+### ER - диаграмма
+![QuickDBD-export](ER.jpg)

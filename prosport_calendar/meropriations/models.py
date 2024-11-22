@@ -132,7 +132,7 @@ class CustomRequest(django.db.models.Model):
         on_delete=django.db.models.SET_NULL,
         null=True,
     )
-    tags = django.db.models.ManyToManyField(
+    disciplines = django.db.models.ManyToManyField(
         Discipline,
         verbose_name="дисциплины",
     )
