@@ -1,5 +1,6 @@
 import django.views.generic
 
+import meropriations.parser
 
 class Home(django.views.generic.ListView):
     template_name = "homepage/main.html"
@@ -14,3 +15,7 @@ class Home(django.views.generic.ListView):
             "name": "second",
         },
     ]
+
+    def get_context_data(self, **kwargs):
+        meropriations.parser.f()
+

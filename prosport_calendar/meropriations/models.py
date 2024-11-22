@@ -57,46 +57,52 @@ class Meropriation(django.db.models.Model):
     slug = django.db.models.SlugField(
         verbose_name="слаг",
         max_length=200,
-        null=False,
+        null=True,
     )
     name = django.db.models.CharField(
         verbose_name="название",
         max_length=150,
-        null=False,
-        unique=True,
+        null=True,
+        unique=False,
     )
     text = django.db.models.TextField(
+        null=True,
         verbose_name="текст",
     )
     count = django.db.models.PositiveIntegerField(
+        null=True,
         verbose_name="количество участников",
     )
     place = django.db.models.TextField(
+        null=True,
         verbose_name="место проведения",
     )
     structure = django.db.models.ForeignKey(
         Structure,
         verbose_name="категория",
+        null=True,
         on_delete=django.db.models.CASCADE,
         related_name="catalog_items",
     )
     tip = django.db.models.ForeignKey(
         Tip,
         verbose_name="категория",
+        null=True,
         on_delete=django.db.models.CASCADE,
         related_name="catalog_items",
     )
     group = django.db.models.ForeignKey(
         Group,
         verbose_name="категория",
+        null=True,
         on_delete=django.db.models.CASCADE,
         related_name="catalog_items",
     )
-    date_start = django.db.models.DateTimeField(
+    date_start = django.db.models.DateField(
         verbose_name="дата начала",
         null=True,
     )
-    date_end = django.db.models.DateTimeField(
+    date_end = django.db.models.DateField(
         verbose_name="дата конца",
         null=True,
     )
