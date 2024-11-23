@@ -1,8 +1,10 @@
 from datetime import timedelta
 
 import django.shortcuts
+from Scripts.bottle import request
 from django.core.paginator import Paginator
 from django.views import View
+from django.views.decorators.http import require_GET
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
@@ -17,16 +19,46 @@ class Home(ListView):
 
     def get_queryset(self):
         queryset = meropriations.models.Meropriation.objects.all()
+        user = self.request.user
 
-        tip = self.request.GET.get("tip", "")
-        group = self.request.GET.get("group", "")
-        structure = self.request.GET.get("structure", "")
-        gender = self.request.GET.get("gender", "")
+        tip = self.request.GET.get("tip")
+        group = self.request.GET.get("group")
+        structure = self.request.GET.get("structure")
+        gender = self.request.GET.get("gender")
         place = self.request.GET.get('place')
         disciple = self.request.GET.get("disciple")
         event_period = self.request.GET.get('event_period')
-        rows_per_page = int(self.request.GET.get("rows_per_page", 10))
+        try:
+            rows_per_page = int(self.request.GET.get("rows_per_page"))
+        except:
+            rows_per_page = 10
         participants_count = self.request.GET.get('participants_count')
+
+        if user.is_authenticated:
+            if (tip is None and group is None and structure is None
+                    and gender is None and place is None and disciple is None
+                    and event_period is None and participants_count is None):
+                self.request.GET.tip = tip = user.profile.tip
+                self.request.GET.group = group = user.profile.group
+                self.request.GET.structure = structure = user.profile.structure
+                self.request.GET.gender = gender = user.profile.gender
+                self.request.GET.place = place = user.profile.place
+                self.request.GET.disciple = disciple = user.profile.disciple
+                self.request.GET.event_period = event_period = user.profile.event_period
+                self.request.GET.participants_count = participants_count = user.profile.participants_count
+            else:
+                user.profile.tip = tip
+                user.profile.group = group
+                user.profile.structure = structure
+                user.profile.gender = gender
+                user.profile.place = place
+                user.profile.disciple = disciple
+                user.profile.event_period = event_period
+                user.profile.participants_count = participants_count
+                user.profile.save()
+        print(tip)
+
+
         if rows_per_page not in [10, 25, 50, 100]:
             rows_per_page = 10
 
@@ -105,7 +137,10 @@ class Home(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        rows_per_page = int(self.request.GET.get("rows_per_page", 10))
+        try:
+            rows_per_page = int(self.request.GET.get("rows_per_page"))
+        except:
+            rows_per_page = 10
         paginator = Paginator(self.get_queryset, rows_per_page)
 
         context["genders"] = ["Муж.", "Жен."]

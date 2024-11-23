@@ -153,55 +153,55 @@ class Profile(django.db.models.Model):
     )
     group_request = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     tip_request = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     structure_request = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     gender_request = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     tip = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     group = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     structure = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     gender = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     place = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     disciple = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     event_period = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     rows_per_page = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
     participants_count = django.db.models.CharField(
         max_length=150,
-        null=False,
+        null=True,
     )
 
     class Meta:
