@@ -18,11 +18,23 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        rows_per_page = int(self.request.GET.get("rows_per_page", 10))
+
+        if rows_per_page not in [10, 25, 50, 100]:
+            rows_per_page = 10
+
         page_number = self.request.GET.get("page", 1)
-        paginator = Paginator(self.get_queryset(),
-                              10)
+
+        paginator = Paginator(self.get_queryset(), rows_per_page)
         page_obj = paginator.get_page(page_number)
-        context["page_obj"] = page_obj
+
+        context.update({
+            "page_obj": page_obj,
+            "rows_per_page": rows_per_page,
+            "rows_per_page_options": [10, 25, 50, 100],
+            "paginator": paginator,
+        })
         return context
 
 
