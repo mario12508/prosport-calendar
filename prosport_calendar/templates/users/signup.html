@@ -1,42 +1,48 @@
 {% extends "base.html" %}
+{% load form_filters %}
 
 {% block title %}Регистрация{% endblock title %}
 
 {% block content %}
-<div class="container">
-  <h1>Регистрация</h1>
-  <form method="POST" action='{% url "users:signup" %}'>
-    {% csrf_token %}
-    {% for hidden_field in form.hidden_fields %}
-      {{ hidden_field }}
-    {% endfor %}
-
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger" role="alert">
-      {% for error in form.non_field_errors %}
-        <div>{{ error }}</div>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; background: linear-gradient(135deg, #007bff, #6610f2);">
+  <div class="col-md-5 bg-white p-5 rounded shadow">
+    <h2 class="text-center mb-4 text-primary">Регистрация</h2>
+    <form method="POST" action="{% url 'users:signup' %}">
+      {% csrf_token %}
+      {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field }}
       {% endfor %}
-      </div>
-    {% endif %}
 
-    {% for field in form.visible_fields %}
-      <div class="mb-3 {% if field.widget_type == 'checkbox' %}form-check{% endif %}">
-        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-        {{ field }}
-        {% if form.is_bound and field.errors %}
-          {% for error in field.errors %}
-            <div class="invalid-feedback d-block">
-              {{ error }}
-            </div>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
           {% endfor %}
-        {% endif %}
+        </div>
+      {% endif %}
 
-        {% if field.help_text %}
-          <div class="form-text">{{ field.help_text }}</div>
-        {% endif %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-  </form>
+      {% for field in form.visible_fields %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+          {{ field|add_class:"form-control shadow-sm" }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary btn-lg w-100 shadow">Зарегистрироваться</button>
+
+      <p class="text-center mt-4">
+        <span class="text-muted">Уже есть аккаунт?</span>
+        <a href="{% url 'users:login' %}" class="text-primary fw-bold text-decoration-none">Войдите</a>
+      </p>
+    </form>
+  </div>
 </div>
-{% endblock content %}
+{% endblock %}

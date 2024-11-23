@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-
+{% load form_filters %}
 {% block title %}Войти{% endblock title %}
 
 {% block content %}
-  <div class="container">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; background: linear-gradient(135deg, #007bff, #6610f2);">
+  <div class="col-md-5 bg-white p-5 rounded shadow">
+    <h2 class="text-center mb-4 text-primary">Войти в аккаунт</h2>
     <form method="post" action="{% url 'users:login' %}">
       {% csrf_token %}
       {% for hidden_field in form.hidden_fields %}
@@ -17,23 +19,25 @@
         </div>
       {% endif %}
       {% for field in form.visible_fields %}
-        <div class="mb-3 {% if field.widget_type == 'checkbox' %}form-check{% endif %}">
-          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-          {{ field }}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+          {{ field|add_class:"form-control shadow-sm" }}
           {% if field.errors %}
             {% for error in field.errors %}
-              <div class="invalid-feedback d-block">
-                {{ error }}
-              </div>
+              <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
           {% endif %}
           {% if field.help_text %}
-            <div class="form-text">{{ field.help_text }}</div>
+            <small class="form-text text-muted">{{ field.help_text }}</small>
           {% endif %}
         </div>
       {% endfor %}
-      <button type="submit" class="btn btn-primary btn-sm">Войти</button>
-      <a href="{% url 'users:signup' %}" class="btn btn-link btn-sm">Зарегистрироваться</a>
+      <button type="submit" class="btn btn-primary btn-lg w-100 shadow">Войти</button>
+      <p class="text-center mt-4">
+        <span class="text-muted">Нет аккаунта?</span>
+        <a href="{% url 'users:signup' %}" class="text-primary fw-bold text-decoration-none">Зарегистрируйтесь</a>
+      </p>
     </form>
   </div>
-{% endblock content %}
+</div>
+{% endblock %}

@@ -177,6 +177,8 @@ def import_pdf():
             meropriation.count = number_part
             disciplines = re.sub(r'^.*?дисциплины\s*', '', meropriation.text)
             meropriation.disciplines = get_discipline(disciplines)
+            meropriation.normal_place = meropriation.place.lower()
+
             bulk_meropriations.append(meropriation)
             i_index = 0
 
@@ -188,6 +190,7 @@ def import_pdf():
             meropriation.count = number_part
             disciplines = re.sub(r'^.*?дисциплины\s*', '', meropriation.text)
             meropriation.disciplines = get_discipline(disciplines)
+            meropriation.normal_place = meropriation.place.lower()
 
             bulk_meropriations.append(meropriation)
             i_index = 0

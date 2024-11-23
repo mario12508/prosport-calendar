@@ -98,6 +98,10 @@ class Meropriation(django.db.models.Model):
         null=True,
         verbose_name="место проведения",
     )
+    normal_place = django.db.models.TextField(
+        null=True,
+        verbose_name="нормальное место проведения",
+    )
     structure = django.db.models.ForeignKey(
         Structure,
         verbose_name="категория",
@@ -141,30 +145,72 @@ class Meropriation(django.db.models.Model):
         return self.name
 
 
-class CustomRequest(django.db.models.Model):
+class Profile(django.db.models.Model):
     user = django.db.models.OneToOneField(
         django.conf.settings.AUTH_USER_MODEL,
         verbose_name="пользователь",
         on_delete=django.db.models.CASCADE,
     )
-    disciplines = django.db.models.ManyToManyField(
-        Discipline,
-        verbose_name="дисциплины",
-    )
-    name = django.db.models.CharField(
-        verbose_name="название",
+    group_request = django.db.models.CharField(
         max_length=150,
         null=False,
-        unique=True,
+    )
+    tip_request = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    structure_request = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    gender_request = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    tip = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    group = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    structure = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    gender = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    place = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    disciple = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    event_period = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    rows_per_page = django.db.models.CharField(
+        max_length=150,
+        null=False,
+    )
+    participants_count = django.db.models.CharField(
+        max_length=150,
+        null=False,
     )
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("id",)
         verbose_name = "дисциплина"
         verbose_name_plural = "дисциплины"
 
     def __str__(self):
-        return self.name[:15]
+        return self.id
 
 
 @receiver(post_save, sender=Meropriation)

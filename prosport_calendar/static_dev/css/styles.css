@@ -1,41 +1,120 @@
+/* General styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   background-color: #f8f9fa;
-}
-
-h1 {
   color: #212529;
+  margin: 0;
+  padding: 0;
 }
 
-.table th, .table td {
-  vertical-align: middle;
+/* Header styles */
+header.navbar {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.navbar-brand {
+header .navbar-brand span {
   font-size: 1.5rem;
   font-weight: bold;
+  color: white;
 }
 
-.nav-link.active {
-  font-weight: bold;
-  color: #ffc107 !important;
+header .nav-link {
+  color: white;
+  font-weight: 500;
 }
 
-form {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+header .nav-link:hover,
+header .nav-link.active {
+  color: #ffd700;
 }
 
-input[type="number"] {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
+/* Footer styles */
+footer {
+  background: linear-gradient(45deg, #343a40, #212529);
+  color: #ced4da;
+}
+
+footer a {
+  color: #ffc107;
+}
+
+footer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  border: none;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #0056b3, #003b7a);
+  color: #fff;
+  transform: scale(1.02);
+}
+
+.btn {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Forms */
+.form-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+input, textarea, select {
+  border-radius: 8px;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.invalid-feedback {
+  color: #e74c3c;
+  font-size: 0.875rem;
+}
+
+.container h1, .container h2 {
   text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #0056b3;
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* Custom utilities */
+.text-muted {
+  color: #868e96 !important;
 }
 
+form label {
+  font-size: 0.9rem;
+}
+
+form .form-control {
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+form .btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+form .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+a.text-primary {
+  transition: color 0.2s;
+}
+
+a.text-primary:hover {
+  color: #6610f2;
+}

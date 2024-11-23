@@ -5,7 +5,6 @@ from django.core.paginator import Paginator
 from django.views import View
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
-from django.db.models.functions import Lower
 from django.db.models import Q
 from django.utils import timezone
 
@@ -83,7 +82,7 @@ class Home(ListView):
         if structure:
             queryset = queryset.filter(structure__name=structure)
         if place:
-            queryset = queryset.filter(place__icontains=place)
+            queryset = queryset.filter(normal_place__icontains=place.lower())
         if disciple:
             query = Q()
             for keyword in disciple.split():
@@ -97,7 +96,6 @@ class Home(ListView):
                 queryset = queryset.filter(count=participants_count)
             except ValueError:
                 pass  # Если введено некорректное значение, фильтрация по количеству не применяется.
-
 
         paginator = Paginator(queryset, rows_per_page)
         page_obj = paginator.get_page(page_number)

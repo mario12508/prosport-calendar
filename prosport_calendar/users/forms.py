@@ -1,6 +1,22 @@
 import django.contrib.auth
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
-from meropriations.models import CustomRequest
+from meropriations.models import Profile
+
+
+class CustomLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.visible_fields():
+            field.field.widget.attrs["class"] = "form-control"
+
+    class Meta:
+        model = django.contrib.auth.models.User
+        fields = ["username", "password"]
+
+    username = forms.CharField(label="Имя пользователя")
+    password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
 
 
 class SignUpForm(django.contrib.auth.forms.UserCreationForm):
@@ -18,20 +34,37 @@ class SignUpForm(django.contrib.auth.forms.UserCreationForm):
             "password2",
         ]
 
+    email = forms.EmailField(
+        label="Электронная почта",
+        required=True,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+        help_text="Введите действующий адрес электронной почты"
+    )
+    username = forms.CharField(
+        label="Имя пользователя",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+        help_text="Ваше имя пользователя, которое будет использоваться для входа"
+    )
+    password1 = forms.CharField(
+        label="Пароль",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        help_text="Минимум 8 символов, включая цифры и буквы"
+    )
+    password2 = forms.CharField(
+        label="Подтверждение пароля",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        help_text="Введите тот же пароль для подтверждения"
+    )
+
 
 class ProfileUpdateForm(django.forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.birthday:
-            self.initial["birthday"] = self.instance.birthday.strftime(
-                "%Y-%m-%d",
-            )
-
         for field in self.visible_fields():
             field.field.widget.attrs["class"] = "form-control"
 
     class Meta:
-        model = CustomRequest
+        model = Profile
         fields = [
-            CustomRequest.name.field.name,
+            Profile.user.field.name,
         ]

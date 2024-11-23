@@ -1,9 +1,9 @@
 {% load static %}
-<header class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+<header class="navbar navbar-expand-lg">
   <div class="container">
-    <a href="/" class="navbar-brand">
+    <a href="/" class="navbar-brand d-flex align-items-center">
       <img src="{% static 'img/logo.svg' %}" alt="ProSport Calendar" height="50" class="me-2">
-      ProSport Calendar
+      <span>ProSport Calendar</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -15,7 +15,7 @@
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:profile' %}">Настройки</a>
+          <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
@@ -26,10 +26,8 @@
         </li>
         {% endif %}
         {% if user.is_superuser %}
-        <li>
-          <a href="{% url 'homepage:update_db' %}"
-             class="nav-link"
-             style="float: left">Обновить базу данных</a>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'homepage:update_db' %}">Обновить базу</a>
         </li>
         {% endif %}
       </ul>
