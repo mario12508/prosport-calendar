@@ -68,8 +68,12 @@ def f():
 
     for i_count in range(15, len(lines)):
         line = lines[i_count]
+        # print(line)
         if "состав" in line:
-            structure_get = get_object_or_404(meropriations.models.Structure, name=line)
+            structure_get = get_object_or_404(
+                meropriations.models.Structure,
+                name=line
+            )
             if structure_get is not None:
                 structure = structure_get
             else:
@@ -79,17 +83,26 @@ def f():
                 structure.save()
         elif re.match(date_pattern_start, line):
             match = re.match(date_pattern_start, line)
+            print(match.group(1), match.group(2))
             date = match.group(1)
             remaining_text = match.group(2)
-            meropriation.date_end = datetime.datetime.strptime(date, '%d.%m.%Y').date()
+            meropriation.date_end = datetime.datetime.strptime(
+                date,
+                '%d.%m.%Y'
+            ).date()
             meropriation_place += remaining_text + "\n"
             meropriation.place = meropriation_place
             meropriation.save()
+            meropriation_place = ""
         elif re.match(date_pattern_end, line):
             match = re.match(date_pattern_end, line)
+            print(match.group(1), match.group(2))
             remaining_text = match.group(1)
             date = match.group(2)
-            meropriation.date_start = datetime.datetime.strptime(date, '%d.%m.%Y').date()
+            meropriation.date_start = datetime.datetime.strptime(
+                date,
+                '%d.%m.%Y'
+            ).date()
             meropriation_text += remaining_text + "\n"
             meropriation.text = meropriation_text
             meropriation.save()
@@ -108,7 +121,6 @@ def f():
                 )
             else:
                 tip = tip.first()
-
             while lines[i_count + 1].isupper():
                 i_count += 1
                 meropriation.name += lines[i_count]
@@ -123,12 +135,14 @@ def f():
             meropriation.save()
         elif line[-1].isdigit():
             match = re.match(int_pattern, line)
+            print(match.group(1), match.group(2))
             text_part = match.group(1).strip()
             number_part = match.group(2)
             meropriation_text += text_part + "\n"
             meropriation.text = meropriation_text
             meropriation.count = int(number_part)
             meropriation.save()
+            meropriation_text = ""
         else:
             meropriation_text += line + "\n"
             meropriation.text = meropriation_text

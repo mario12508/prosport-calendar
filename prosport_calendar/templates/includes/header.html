@@ -1,33 +1,35 @@
 {% load static %}
-{% load active_link_tags %}
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+<header class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
   <div class="container">
-    <nav>
-      {% with request.resolver_match.view_name as view_name %}
-        <a href="/">
-          <img src='{% static "/img/favicon.ico" %}' alt="" height="40">
-        </a>
-        <nav style="float:right">
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a href="{% url 'homepage:main' %}"
-               class="nav-link {% if view_name == 'homepage:main' %}active{% endif %}">Главная</a>
-            {% if user.is_authenticated %}
-              <a href="{% url 'users:logout' %}"
-                 class="nav-link {% if view_name == 'users:logout' %}active{% endif %}"
-                 style="float: left">Выйти</a>
-            {% else %}
-              <a href="{% url 'users:login' %}"
-                 class="nav-link {% if view_name == 'users:login' %}active{% endif %}"
-                 style="float: left">Войти</a>
-            {% endif %}
-            {% if user.is_superuser %}
-              <a href="{% url 'users:logout' %}"
-                 class="nav-link {% if view_name == 'users:logout' %}active{% endif %}"
-                 style="float: left">Обновить базу данных</a>
-            {% endif %}
-          </div>
-        </nav>
-      {% endwith %}
-    </nav>
+    <a href="/" class="navbar-brand">
+      <img src="{% static 'img/logo.svg' %}" alt="ProSport Calendar" height="50" class="me-2">
+      ProSport Calendar
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link {% if view_name == 'homepage:main' %}active{% endif %}" href="{% url 'homepage:main' %}">Главная</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+        </li>
+        {% endif %}
+        {% if user.is_superuser %}
+        <li>
+          <a href="{% url 'homepage:update_db' %}"
+             class="nav-link"
+             style="float: left">Обновить базу данных</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
   </div>
 </header>

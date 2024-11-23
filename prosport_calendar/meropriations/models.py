@@ -1,5 +1,9 @@
 import django.db.models
 import django.conf
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Structure(django.db.models.Model):
@@ -158,3 +162,20 @@ class CustomRequest(django.db.models.Model):
 
     def __str__(self):
         return self.name[:15]
+
+
+@receiver(post_save, sender=Meropriation)
+def notify_users_on_new_event(sender, instance, created, **kwargs):
+    if created:
+        subject = "Новое спортивное мероприятие добавлено"
+        message = f"Добавлено новое мероприятие: {instance.name}\nСроки проведения: {instance.date_start} - {instance.date_end}\nМесто проведения: {instance.place}"
+        recipients = [user.email for user in
+                      User.objects.filter(is_active=True) if user.email]
+
+        send_mail(
+            subject,
+            message,
+            django.conf.settings.DEFAULT_FROM_EMAIL,
+            recipients,
+            fail_silently=False,
+        )
