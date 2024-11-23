@@ -138,11 +138,10 @@ class Discipline(django.db.models.Model):
 
 
 class CustomRequest(django.db.models.Model):
-    user = django.db.models.ForeignKey(
+    user = django.db.models.OneToOneField(
         django.conf.settings.AUTH_USER_MODEL,
         verbose_name="пользователь",
-        on_delete=django.db.models.SET_NULL,
-        null=True,
+        on_delete=django.db.models.CASCADE,
     )
     disciplines = django.db.models.ManyToManyField(
         Discipline,

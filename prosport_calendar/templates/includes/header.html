@@ -15,6 +15,9 @@
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'users:profile' %}">Настройки</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
         </li>
         {% else %}

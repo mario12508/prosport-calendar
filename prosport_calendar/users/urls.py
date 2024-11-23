@@ -24,6 +24,11 @@ urlpatterns = [
         users.views.Registration.as_view(),
         name="signup",
     ),
+    django.urls.path(
+        "profile/",
+        users.views.Profile.as_view(),
+        name="profile",
+    ),
 ]
 
 __all__ = ()

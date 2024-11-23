@@ -8,7 +8,7 @@ import PyPDF2
 import meropriations.models
 
 
-def f():
+def import_pdf():
     url = ('https://storage.minsport.gov.ru/cms-uploads/cms/'
            'II_chast_EKP_2024_14_11_24_65c6deea36.pdf')
 

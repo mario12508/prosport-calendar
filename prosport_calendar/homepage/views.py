@@ -1,8 +1,8 @@
+import django.shortcuts
 from django.core.paginator import Paginator
 from django.views import View
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
 
 import meropriations.parser
 from meropriations.models import Meropriation
@@ -44,5 +44,6 @@ class UpdateDBView(View):
             raise PermissionDenied(
                 "У вас недостаточно прав для выполнения этой операции."
             )
-        meropriations.parser.f()
-        return HttpResponse("База данных успешно обновлена.")
+        meropriations.parser.import_pdf()
+        return django.shortcuts.redirect("homepage:main")
+
