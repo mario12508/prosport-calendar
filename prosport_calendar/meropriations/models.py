@@ -62,8 +62,8 @@ class Meropriation(django.db.models.Model):
     name = django.db.models.CharField(
         verbose_name="название",
         max_length=150,
-        null=True,
         unique=False,
+        null=True,
     )
     text = django.db.models.TextField(
         null=True,
@@ -115,6 +115,7 @@ class Meropriation(django.db.models.Model):
     def __str__(self):
         return self.name
 
+
 class Discipline(django.db.models.Model):
     name = django.db.models.CharField(
         verbose_name="название",
@@ -130,6 +131,7 @@ class Discipline(django.db.models.Model):
 
     def __str__(self):
         return self.name[:15]
+
 
 class CustomRequest(django.db.models.Model):
     user = django.db.models.ForeignKey(

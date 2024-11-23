@@ -20,6 +20,11 @@
                  class="nav-link {% if view_name == 'users:login' %}active{% endif %}"
                  style="float: left">Войти</a>
             {% endif %}
+            {% if user.is_superuser %}
+              <a href="{% url 'users:logout' %}"
+                 class="nav-link {% if view_name == 'users:logout' %}active{% endif %}"
+                 style="float: left">Обновить базу данных</a>
+            {% endif %}
           </div>
         </nav>
       {% endwith %}

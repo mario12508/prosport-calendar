@@ -3,6 +3,7 @@ import ssl
 from urllib.request import urlopen, Request
 import PyPDF2
 import re
+from django.shortcuts import get_object_or_404
 
 import meropriations.models
 
@@ -64,14 +65,18 @@ def f():
     date_pattern_end = r'^(.*?)(\d{2}\.\d{2}\.\d{4})$'
     int_pattern = r'(.+?)(\d+)$'
     string_pattern = r'^[a-zA-Zа-яА-ЯёЁ\- ]+$'
-    i_count = 15
 
-    while i_count < len(lines):
+    for i_count in range(15, len(lines)):
         line = lines[i_count]
-        if line == "Основной состав":
-            structure = meropriations.models.Structure.objects.get(name="Основной состав")
-        elif line == "Молодежный (резервный) состав":
-            structure = meropriations.models.Structure.objects.get(name="Молодежный (резервный) состав")
+        if "состав" in line:
+            structure_get = get_object_or_404(meropriations.models.Structure, name=line)
+            if structure_get is not None:
+                structure = structure_get
+            else:
+                structure = meropriations.models.Structure.objects.create(
+                    name=line,
+                )
+                structure.save()
         elif re.match(date_pattern_start, line):
             match = re.match(date_pattern_start, line)
             date = match.group(1)
@@ -128,4 +133,3 @@ def f():
             meropriation_text += line + "\n"
             meropriation.text = meropriation_text
             meropriation.save()
-        i_count += 1
