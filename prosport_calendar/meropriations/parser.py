@@ -4,9 +4,22 @@ import ssl
 from urllib.request import urlopen, Request
 import os
 import PyPDF2
+from django.db.models.functions import Substr, Length
+from django.db.models import F
 
 import meropriations.models
 
+
+def get_discipline(disciplines):
+    disciplines_pattern = r"дисциплины?\s*([A-Za-z0-9-]+(?:\s*,\s*[A-Za-z0-9-]+)*)|КЛАСС\s*([A-Za-z0-9-]+(?:\s*,\s*[A-Za-z0-9-]+)*)"
+    matches = re.findall(disciplines_pattern, disciplines)
+    disciplines = []
+    for match in matches:
+        if match[0]:
+            disciplines.extend(match[0].split(", "))
+        elif match[1]:
+            disciplines.extend(match[1].split(", "))
+    return " ".join(set(disciplines))
 
 def import_pdf():
     url = ('https://storage.minsport.gov.ru/cms-uploads/cms/'
@@ -36,9 +49,23 @@ def import_pdf():
                   text)
     lines = text.split("\n")
 
+    meropriations.models.Tip.objects.all().delete()
     meropriations.models.Structure.objects.all().delete()
     meropriations.models.Group.objects.all().delete()
     meropriations.models.Meropriation.objects.all().delete()
+
+    tip_list = (
+        "ЧЕМПИОНАТ",
+        "КУБОК",
+        "МЕЖРЕГИОНАЛЬНОЕ",
+        "УЧЕБНО-ТРЕНИРОВОЧНОЕ",
+        "МЕЖДУНАРОДНЫЕ",
+        "ПЕРВЕНСТВО",
+        "ВСЕРОССИЙСКОЕ",
+        "ДРУГОЕ",
+    )
+    for tip_name in tip_list:
+        meropriations.models.Tip.objects.create(name=tip_name)
 
     structures = [
         meropriations.models.Structure(name="Основной состав"),
@@ -59,7 +86,8 @@ def import_pdf():
     string_pattern = r'^([а-яА-ЯёЁa-zA-Z]+)(\d{2}\.\d{2}\.\d{4})$'
 
     list_users = (
-    "женщины", "юниоры", "мужчины", "юноши", "юниорки", "мальчики", "девушки")
+    "женщины", "юниоры", "мужчины", "юноши", "юниорки", "мальчики", "девушки", "девочки",
+    )
 
     for line in lines[15:]:
         if counter % 100 == 0:
@@ -81,17 +109,23 @@ def import_pdf():
 
         if i_index == 0 and line[0].isdigit():
             list_line = line.split()
-            tip_slug = list_line[0]
-            tip_name = list_line[1]
-            tip, created = meropriations.models.Tip.objects.get_or_create(
-                name=tip_name)
+            event_slug = list_line[0]
+            event_name = " ".join(list_line[1:])
+            for tip_item in meropriations.models.Tip.objects.exclude(name="ВСЕ"):
+                if tip_item.name[:-3] in event_name:
+                    tip = tip_item
+                    break
+            else:
+                tip = meropriations.models.Tip.objects.get(name="ДРУГОЕ")
+
             meropriation = meropriations.models.Meropriation(
-                name=" ".join(list_line[1:]),
+                name=event_name,
                 tip=tip,
                 group=group,
-                slug=tip_slug,
+                slug=event_slug,
                 structure=structure,
             )
+
             i_index = 1
 
         elif (line.split(",")[0] in list_users or line.split()[0] in list_users
@@ -138,12 +172,12 @@ def import_pdf():
             date_part = match.group(1).strip()
             text_part = match.group(2).strip()
             number_part = int(match.group(3))
-            meropriation.date_end = datetime.datetime.strptime(date_part,
-                                                               '%d.%m.%Y').date()
+            meropriation.date_end = datetime.datetime.strptime(date_part,'%d.%m.%Y').date()
             meropriation.place = text_part
             meropriation.count = number_part
-            bulk_meropriations.append(
-                meropriation)
+            disciplines = re.sub(r'^.*?дисциплины\s*', '', meropriation.text)
+            meropriation.disciplines = get_discipline(disciplines)
+            bulk_meropriations.append(meropriation)
             i_index = 0
 
         elif i_index == 3 and re.match(int_pattern, line):
@@ -152,8 +186,10 @@ def import_pdf():
             number_part = int(match.group(2))
             meropriation.place += "\n" + text_part
             meropriation.count = number_part
-            bulk_meropriations.append(
-                meropriation)
+            disciplines = re.sub(r'^.*?дисциплины\s*', '', meropriation.text)
+            meropriation.disciplines = get_discipline(disciplines)
+
+            bulk_meropriations.append(meropriation)
             i_index = 0
 
         elif i_index == 3 and meropriation.place:
@@ -162,8 +198,7 @@ def import_pdf():
             match = re.match(date_pattern_start, line)
             date = match.group(1)
             remaining_text = match.group(2)
-            meropriation.date_end = datetime.datetime.strptime(date,
-                                                               '%d.%m.%Y').date()
+            meropriation.date_end = datetime.datetime.strptime(date,'%d.%m.%Y').date()
             meropriation.place = remaining_text
 
         counter += 1

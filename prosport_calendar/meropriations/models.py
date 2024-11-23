@@ -57,6 +57,23 @@ class Group(django.db.models.Model):
         return self.name[:15]
 
 
+class Discipline(django.db.models.Model):
+    name = django.db.models.CharField(
+        verbose_name="название",
+        max_length=150,
+        null=False,
+        unique=True,
+    )
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "дисциплина"
+        verbose_name_plural = "дисциплины"
+
+    def __str__(self):
+        return self.name[:15]
+
+
 class Meropriation(django.db.models.Model):
     slug = django.db.models.SlugField(
         verbose_name="слаг",
@@ -102,6 +119,10 @@ class Meropriation(django.db.models.Model):
         on_delete=django.db.models.CASCADE,
         related_name="catalog_items",
     )
+    disciplines = django.db.models.TextField(
+        verbose_name="дисциплины",
+        null=True,
+    )
     date_start = django.db.models.DateField(
         verbose_name="дата начала",
         null=True,
@@ -118,23 +139,6 @@ class Meropriation(django.db.models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Discipline(django.db.models.Model):
-    name = django.db.models.CharField(
-        verbose_name="название",
-        max_length=150,
-        null=False,
-        unique=True,
-    )
-
-    class Meta:
-        ordering = ("name",)
-        verbose_name = "дисциплина"
-        verbose_name_plural = "дисциплины"
-
-    def __str__(self):
-        return self.name[:15]
 
 
 class CustomRequest(django.db.models.Model):
