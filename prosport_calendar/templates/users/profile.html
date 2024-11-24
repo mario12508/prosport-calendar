@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container">
-  <h1>Личный кабинет</h1>
+  <h1>Настройки уведомлений</h1>
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-{{ message.tags }}" role="alert">
@@ -13,67 +13,49 @@
       </div>
     {% endfor %}
   {% endif %}
-  <form method="POST" enctype="multipart/form-data" class="mt-4">
-    {% csrf_token %}
-    {% for hidden_field in user_form.hidden_fields %}
-        {{ hidden_field }}
-    {% endfor %}
+  <div class="row mt-3 mb-3">
+    <form method="GET" action="" class="d-flex flex-wrap justify-content-between">
+      <div class="form-group">
+        <label for="tip">Тип</label>
+        <select name="tip" id="tip" class="form-control" onchange="this.form.submit()">
+          <option value="">Все</option> <!-- Option for no filter -->
+          {% for option in tips %}
+            <option value="{{ option }}" {% if option == request.GET.tip %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-    {% if user_form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for error in user_form.non_field_errors %}
-                <div>{{ error }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
+      <div class="form-group">
+        <label for="gender">Пол</label>
+        <select name="gender" id="gender" class="form-control" onchange="this.form.submit()">
+          <option value="">Все</option>
+          {% for option in genders %}
+            <option value="{{ option }}" {% if option == request.GET.gender %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-    {% for field in user_form.visible_fields %}
-        <div class="mb-3">
-            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-            {{ field }}
-            {% if user_form.is_bound and field.errors %}
-                {% for error in field.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-            {% if field.help_text %}
-                <div class="form-text">{{ field.help_text }}</div>
-            {% endif %}
-        </div>
-    {% endfor %}
+      <div class="form-group">
+        <label for="group">Вид спорта</label>
+        <select name="group" id="group" class="form-control" onchange="this.form.submit()">
+          <option value="">Все</option>
+          {% for option in groups %}
+            <option value="{{ option }}" {% if option == request.GET.group %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-    {% for hidden_field in profile_form.hidden_fields %}
-        {{ hidden_field }}
-    {% endfor %}
-
-    {% if profile_form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for error in profile_form.non_field_errors %}
-                <div>{{ error }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    {% for field in profile_form.visible_fields %}
-        <div class="mb-3">
-            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-            {{ field }}
-            {% if profile_form.is_bound and field.errors %}
-                {% for error in field.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-            {% if field.help_text %}
-                <div class="form-text">{{ field.help_text }}</div>
-            {% endif %}
-        </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-  </form>
+      <div class="form-group">
+        <label for="structure">Возврастная группа</label>
+        <select name="structure" id="structure" class="form-control" onchange="this.form.submit()">
+          <option value="">Все</option>
+          {% for option in structures %}
+            <option value="{{ option }}" {% if option == request.GET.structure %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock content %}

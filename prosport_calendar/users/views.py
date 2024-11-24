@@ -4,6 +4,7 @@ import django.contrib.auth.mixins
 import django.views
 
 import users.forms
+import meropriations.models
 
 
 class CustomLoginView(LoginView):
@@ -44,35 +45,45 @@ class Profile(
 
     def get(self, request):
         user = request.user
-        profile_form = users.forms.ProfileUpdateForm(
-            instance=user.profile,
-        )
         context = {
-            "profile_form": profile_form,
+
         }
+        context["genders"] = ["Муж.", "Жен."]
+        context['tips'] = (
+            meropriations.models.Meropriation.objects
+            .values_list('tip__name', flat=True)
+            .distinct()
+            .order_by('tip__name')  # Optional: to ensure consistent ordering
+        )
+        context['groups'] = (
+            meropriations.models.Meropriation.objects
+            .values_list('group__name', flat=True)
+            .distinct()
+            .order_by('group__name')  # Optional: to ensure consistent ordering
+        )
+        context['structures'] = (
+            meropriations.models.Meropriation.objects
+            .values_list('structure__name', flat=True)
+            .distinct()
+            .order_by('structure__name')
+        )
+        tip = request.GET.get("tip")
+        gender = request.GET.get("gender")
+        group = request.GET.get("group")
+        structure = request.GET.get("structure")
+
+        if (tip is None and gender is None
+                and group is None and structure is None):
+            request.GET.tip = user.profile.tip_request
+            request.GET.gender = user.profile.gender_request
+            request.GET.group = user.profile.group_request
+            request.GET.structure = user.profile.structure_request
+        else:
+            user.profile.tip_request = request.GET.get("tip")
+            user.profile.gender_request = request.GET.get("gender")
+            user.profile.group_request = request.GET.get("group")
+            user.profile.structure_request = request.GET.get("structure")
+            user.profile.save()
+        context['request'] = request
+
         return django.shortcuts.render(request, self.template_name, context)
-
-    def post(self, request):
-        user = request.user
-        profile_form = users.forms.ProfileUpdateForm(
-            request.POST or None,
-            request.FILES or None,
-            instance=user.profile,
-        )
-        if profile_form.is_valid():
-            profile_form.save()
-            request.session.modified = True
-            django.contrib.messages.success(
-                request,
-                "Настройки сохранены.",
-            )
-            return django.shortcuts.redirect("users:profile")
-
-        context = {
-            "profile_form": profile_form,
-        }
-        return django.shortcuts.render(
-            request,
-            self.template_name,
-            context,
-        )
