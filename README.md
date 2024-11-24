@@ -14,7 +14,7 @@
 https://github.com/hackathonsrus/pp_20299_pfo_ta_litseisti_kfu_102
 ```
 
-#### Переходим в папку prosport_calendar
+#### Переходим в папку pp_20299_pfo_ta_litseisti_kfu_102
 
 ```commandline
 cd prosport_calendar
