@@ -8,4 +8,6 @@ from meropriations.models import Profile
 @receiver(post_save, sender=User)
 def create_custom_request_for_user(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance, )
+        Profile.objects.create(
+            user=instance,
+        )

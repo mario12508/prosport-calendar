@@ -4,8 +4,6 @@ import ssl
 from urllib.request import urlopen, Request
 import os
 import PyPDF2
-from django.db.models.functions import Substr, Length
-from django.db.models import F
 
 import meropriations.models
 
@@ -21,16 +19,19 @@ def get_discipline(disciplines):
             disciplines.extend(match[1].split(", "))
     return " ".join(set(disciplines))
 
+
 def import_pdf():
-    url = ('https://storage.minsport.gov.ru/cms-uploads/cms/'
-           'II_chast_EKP_2024_14_11_24_65c6deea36.pdf')
+    url = (
+        "https://storage.minsport.gov.ru/cms-uploads/cms/"
+        "II_chast_EKP_2024_14_11_24_65c6deea36.pdf"
+    )
 
     pdf_file_path = "media/large_document.pdf"
 
     os.makedirs(os.path.dirname(pdf_file_path), exist_ok=True)
 
     context = ssl._create_unverified_context()
-    request = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
 
     with urlopen(request, context=context) as response:
         with open(pdf_file_path, "wb") as f:
@@ -45,8 +46,7 @@ def import_pdf():
             if page_text:
                 text += page_text
 
-    text = re.sub(r'Стр\. \d+ из \d{4}', '',
-                  text)
+    text = re.sub(r"Стр\. \d+ из \d{4}", "", text)
     lines = text.split("\n")
 
     meropriations.models.Tip.objects.all().delete()
@@ -79,14 +79,21 @@ def import_pdf():
     counter = 0
     bulk_meropriations = []
 
-    date_pattern_start = r'(\d{2}\.\d{2}\.\d{4})(.*)'
-    date_pattern_end = r'^(.*?)(\d{2}\.\d{2}\.\d{4})$'
-    int_pattern = r'(.*?)(\d+)$'
-    date_string_int_pattern = r'^(\d{2}\.\d{2}\.\d{4})(.*?)(\d+)$'
-    string_pattern = r'^([а-яА-ЯёЁa-zA-Z]+)(\d{2}\.\d{2}\.\d{4})$'
+    date_pattern_start = r"(\d{2}\.\d{2}\.\d{4})(.*)"
+    date_pattern_end = r"^(.*?)(\d{2}\.\d{2}\.\d{4})$"
+    int_pattern = r"(.*?)(\d+)$"
+    date_string_int_pattern = r"^(\d{2}\.\d{2}\.\d{4})(.*?)(\d+)$"
+    string_pattern = r"^([а-яА-ЯёЁa-zA-Z]+)(\d{2}\.\d{2}\.\d{4})$"
 
     list_users = (
-    "женщины", "юниоры", "мужчины", "юноши", "юниорки", "мальчики", "девушки", "девочки",
+        "женщины",
+        "юниоры",
+        "мужчины",
+        "юноши",
+        "юниорки",
+        "мальчики",
+        "девушки",
+        "девочки",
     )
 
     for line in lines[15:]:
@@ -98,10 +105,12 @@ def import_pdf():
 
         if line == "Основной состав":
             structure = meropriations.models.Structure.objects.get(
-                name="Основной состав")
+                name="Основной состав"
+            )
         elif line == "Молодежный (резервный) состав":
             structure = meropriations.models.Structure.objects.get(
-                name="Молодежный (резервный) состав")
+                name="Молодежный (резервный) состав"
+            )
 
         if i_index == 0 and line[0].isalpha() and line.isupper():
             group = meropriations.models.Group(name=line)
@@ -111,7 +120,9 @@ def import_pdf():
             list_line = line.split()
             event_slug = list_line[0]
             event_name = " ".join(list_line[1:])
-            for tip_item in meropriations.models.Tip.objects.exclude(name="ВСЕ"):
+            for tip_item in meropriations.models.Tip.objects.exclude(
+                name="ВСЕ"
+            ):
                 if tip_item.name[:-3] in event_name:
                     tip = tip_item
                     break
@@ -128,18 +139,23 @@ def import_pdf():
 
             i_index = 1
 
-        elif (line.split(",")[0] in list_users or line.split()[0] in list_users
-              or (re.match(string_pattern, line) and re.match(string_pattern,
-                                                              line).group(
-                    1) in list_users)):
+        elif (
+            line.split(",")[0] in list_users
+            or line.split()[0] in list_users
+            or (
+                re.match(string_pattern, line)
+                and re.match(string_pattern, line).group(1) in list_users
+            )
+        ):
             remaining_text = line
             i_index = 2
             if re.match(date_pattern_end, line):
                 match = re.match(date_pattern_end, line)
                 remaining_text = match.group(1)
                 date = match.group(2)
-                meropriation.date_start = datetime.datetime.strptime(date,
-                                                                     '%d.%m.%Y').date()
+                meropriation.date_start = datetime.datetime.strptime(
+                    date, "%d.%m.%Y"
+                ).date()
                 i_index = 3
 
             if not meropriation.text:
@@ -157,8 +173,9 @@ def import_pdf():
                 match = re.match(date_pattern_end, line)
                 remaining_text = match.group(1)
                 date = match.group(2)
-                meropriation.date_start = datetime.datetime.strptime(date,
-                                                                     '%d.%m.%Y').date()
+                meropriation.date_start = datetime.datetime.strptime(
+                    date, "%d.%m.%Y"
+                ).date()
                 i_index = 3
 
             if not meropriation.text:
@@ -172,10 +189,12 @@ def import_pdf():
             date_part = match.group(1).strip()
             text_part = match.group(2).strip()
             number_part = int(match.group(3))
-            meropriation.date_end = datetime.datetime.strptime(date_part,'%d.%m.%Y').date()
+            meropriation.date_end = datetime.datetime.strptime(
+                date_part, "%d.%m.%Y"
+            ).date()
             meropriation.place = text_part
             meropriation.count = number_part
-            disciplines = re.sub(r'^.*?дисциплины\s*', '', meropriation.text)
+            disciplines = re.sub(r"^.*?дисциплины\s*", "", meropriation.text)
             meropriation.disciplines = get_discipline(disciplines)
             meropriation.normal_place = meropriation.place.lower()
 
@@ -188,7 +207,7 @@ def import_pdf():
             number_part = int(match.group(2))
             meropriation.place += "\n" + text_part
             meropriation.count = number_part
-            disciplines = re.sub(r'^.*?дисциплины\s*', '', meropriation.text)
+            disciplines = re.sub(r"^.*?дисциплины\s*", "", meropriation.text)
             meropriation.disciplines = get_discipline(disciplines)
             meropriation.normal_place = meropriation.place.lower()
 
@@ -201,7 +220,9 @@ def import_pdf():
             match = re.match(date_pattern_start, line)
             date = match.group(1)
             remaining_text = match.group(2)
-            meropriation.date_end = datetime.datetime.strptime(date,'%d.%m.%Y').date()
+            meropriation.date_end = datetime.datetime.strptime(
+                date, "%d.%m.%Y"
+            ).date()
             meropriation.place = remaining_text
 
         counter += 1

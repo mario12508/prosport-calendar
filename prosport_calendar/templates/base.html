@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'img/fav.ico' %}">
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     {% include "includes/header.html" %}
     {% include "includes/meropriations.html" %}
-    <main class="container py-5">
+    <main role="main" class="container flex-grow-1 py-5">
       {% block content %}{% endblock %}
     </main>
     {% include "includes/footer.html" %}

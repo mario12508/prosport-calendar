@@ -38,22 +38,22 @@ class SignUpForm(django.contrib.auth.forms.UserCreationForm):
         label="Электронная почта",
         required=True,
         widget=forms.EmailInput(attrs={"class": "form-control"}),
-        help_text="Введите действующий адрес электронной почты"
+        help_text="Введите действующий адрес электронной почты",
     )
     username = forms.CharField(
         label="Имя пользователя",
         widget=forms.TextInput(attrs={"class": "form-control"}),
-        help_text="Ваше имя пользователя, которое будет использоваться для входа"
+        help_text="Ваше имя пользователя, которое будет использоваться для входа",
     )
     password1 = forms.CharField(
         label="Пароль",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
-        help_text="Минимум 8 символов, включая цифры и буквы"
+        help_text="Минимум 8 символов, включая цифры и буквы",
     )
     password2 = forms.CharField(
         label="Подтверждение пароля",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
-        help_text="Введите тот же пароль для подтверждения"
+        help_text="Введите тот же пароль для подтверждения",
     )
 
 

@@ -1,12 +1,23 @@
 {% if meropriations %}
-  <nav class="nav nav-pills flex-column flex-sm-row">
-    <div class="container" id="birthday-div">
-      <h4>СЕГОДНЯ НАЧАЛИСЬ СОВЕРНОВАНИЯ:</h4>
+<nav class="nav nav-pills flex-column flex-sm-row mb-4">
+  <div class="container" id="notifications-div">
+    <h5 class="text-primary text-center mb-3">Сегодня начались соревнования:</h5>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
       {% for meropriation in meropriations %}
-        {{ meropriation.name }} {{ meropriation.date_start }} {{ meropriation.date_end }}
-        <br>
+      <div class="col">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="card-title text-truncate" title="{{ meropriation.name }}">
+              {{ meropriation.name }}
+            </h6>
+            <p class="card-text small text-muted mb-1">
+              <i class="bi bi-calendar-event"></i> {{ meropriation.date_start }} - {{ meropriation.date_end }}
+            </p>
+          </div>
+        </div>
+      </div>
       {% endfor %}
     </div>
-  </nav>
-  <hr>
+  </div>
+</nav>
 {% endif %}

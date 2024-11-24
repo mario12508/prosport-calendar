@@ -218,8 +218,11 @@ def notify_users_on_new_event(sender, instance, created, **kwargs):
     if created:
         subject = "Новое спортивное мероприятие добавлено"
         message = f"Добавлено новое мероприятие: {instance.name}\nСроки проведения: {instance.date_start} - {instance.date_end}\nМесто проведения: {instance.place}"
-        recipients = [user.email for user in
-                      User.objects.filter(is_active=True) if user.email]
+        recipients = [
+            user.email
+            for user in User.objects.filter(is_active=True)
+            if user.email
+        ]
 
         send_mail(
             subject,
