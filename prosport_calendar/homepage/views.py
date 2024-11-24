@@ -110,6 +110,8 @@ class Home(ListView):
                 date_start__gte=next_half_year_start,
                 date_start__lte=next_half_year_end,
             )
+        elif event_period == "none":
+            pass
 
         if tip:
             queryset = queryset.filter(tip__name=tip)

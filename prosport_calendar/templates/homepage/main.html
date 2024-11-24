@@ -76,6 +76,7 @@
         <div class="form-group w-100 mt-3">
           <label>Выберите период:</label>
           <div class="btn-group w-100" role="group">
+            <button type="submit" name="event_period" value="none" class="btn btn-outline-primary {% if request.GET.event_period == 'none' %}active{% endif %}">Все</button>
             <button type="submit" name="event_period" value="upcoming" class="btn btn-outline-primary {% if request.GET.event_period == 'upcoming' %}active{% endif %}">Ближайшие мероприятия</button>
             <button type="submit" name="event_period" value="this_week" class="btn btn-outline-primary {% if request.GET.event_period == 'this_week' %}active{% endif %}">Мероприятия текущей недели</button>
             <button type="submit" name="event_period" value="next_month" class="btn btn-outline-primary {% if request.GET.event_period == 'next_month' %}active{% endif %}">Мероприятия следующего месяца</button>
