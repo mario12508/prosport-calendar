@@ -1,6 +1,10 @@
 # Prosport calendar
 ## Интерактивная платформа для отображения календаря спортивных мероприятий, с возможностью фильтрации событий по ключевым параметрам
-### Инструкция по запуску проекта
+### Сайт-хостинг
+
+<a href="https://mario12508.pythonanywhere.com/">https://mario12508.pythonanywhere.com/</a>
+
+### Инструкция по запуску проекта локально
 Все команды вводятся в терминале</br>
 ***Необходимо иметь установленные pip и python для терминала***
 
@@ -10,7 +14,7 @@
 https://github.com/hackathonsrus/pp_20299_pfo_ta_litseisti_kfu_102
 ```
 
-#### Переходим в папку djexmple
+#### Переходим в папку prosport_calendar
 
 ```commandline
 cd prosport_calendar
