@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "homepage.apps.HomepageConfig",
     "meropriations.apps.MeropriationsConfig",
+    'django_apscheduler',
     "active_link",
 ]
 
@@ -69,6 +70,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "meropriations.context_processors.get_today_meropriations",
             ],
         },
     },

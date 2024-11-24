@@ -1,0 +1,12 @@
+{% if meropriations %}
+  <nav class="nav nav-pills flex-column flex-sm-row">
+    <div class="container" id="birthday-div">
+      <h4>СЕГОДНЯ НАЧАЛИСЬ СОВЕРНОВАНИЯ:</h4>
+      {% for meropriation in meropriations %}
+        {{ meropriation.name }} {{ meropriation.date_start }} {{ meropriation.date_end }}
+        <br>
+      {% endfor %}
+    </div>
+  </nav>
+  <hr>
+{% endif %}
