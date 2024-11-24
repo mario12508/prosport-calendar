@@ -19,14 +19,6 @@ DEBUG = load_bool("DJANGO_DEBUG", True)
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="*").split(",")
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "your_email@gmail.com"
-EMAIL_HOST_PASSWORD = "your_password"
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 WEBPUSH_SETTINGS = {
     "VAPID_PUBLIC_KEY": "Ваш публичный ключ",
     "VAPID_PRIVATE_KEY": "Ваш приватный ключ",

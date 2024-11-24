@@ -1,5 +1,3 @@
-import datetime
-
 import django.utils.timezone
 
 import meropriations.models

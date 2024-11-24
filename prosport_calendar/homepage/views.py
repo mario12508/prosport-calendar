@@ -1,10 +1,8 @@
 from datetime import timedelta
 
 import django.shortcuts
-from Scripts.bottle import request
 from django.core.paginator import Paginator
 from django.views import View
-from django.views.decorators.http import require_GET
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
