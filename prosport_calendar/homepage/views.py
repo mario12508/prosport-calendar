@@ -65,7 +65,6 @@ class Home(ListView):
                 user.profile.event_period = event_period
                 user.profile.participants_count = participants_count
                 user.profile.save()
-        print(tip)
 
         if rows_per_page not in [10, 25, 50, 100]:
             rows_per_page = 10
