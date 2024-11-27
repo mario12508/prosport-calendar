@@ -17,7 +17,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="no_key")
 
 DEBUG = load_bool("DJANGO_DEBUG", True)
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="*").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default=".vercel.app").split(",")
 
 WEBPUSH_SETTINGS = {
     "VAPID_PUBLIC_KEY": "Ваш публичный ключ",
